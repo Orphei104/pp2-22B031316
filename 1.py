@@ -1,1 +1,1 @@
-print ("hello not za warudo tokio tomore")
+print ("change from git")

@@ -1,0 +1,1 @@
+print ("hello not za warudo tokio tomore")

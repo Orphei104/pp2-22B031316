@@ -1,7 +1,9 @@
+# Добавляем Библиотеки 
 import random
-import pygame, sys
+import pygame
+import sys
 
-
+#Создаем функцию для круглых объектов
 def roundline(canvas, color, start, end, radius=1) :
     Xaxis = end[0] - start[0]
     Yaxis = end[1] - start[1]
@@ -11,7 +13,9 @@ def roundline(canvas, color, start, end, radius=1) :
         y = int(start[1] + float(i) / dist * Yaxis)
         pygame.draw.circle(canvas, color, (x, y), radius)
 
+#Создаем основную функцию для манипуляции 
 def main():
+    #инициализируем библиотеку пайгейм и создаем монитор с слоем на котором будут рисунки
     pygame.init()
     global screen, baseLayer
     screen = pygame.display.set_mode((640, 480))
@@ -19,7 +23,7 @@ def main():
 
     clock = pygame.time.Clock()
 
-    # colors
+    # Цвета
     BLUE = (0, 0, 255)
     RED = (255, 0, 0)
     GREEN = (0, 255, 0)
@@ -28,6 +32,8 @@ def main():
     YELLOW = (255, 255, 0)
 
     color = WHITE
+
+    #Переменные которые хранят в себе старые координаты
     prevX = -1
     prevY = -1
     currentX = -1
@@ -35,18 +41,22 @@ def main():
 
     screen.fill((0, 0, 0))
 
+    # Переменные что хранят в себе последние значения 
     isMouseDown = False
     figure = ""
 
     last_pos = (0, 0)
     radius = 1
 
+    #основная линия для запуска окна в пайгейм
     while True:
+        #Пишем pressed которая откатывает все нажатые последнии клавиши если они нажаты
         pressed = pygame.key.get_pressed()
+        #цикл чтобы можно было закрыть окно
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-
+            # То что считает момент когда ЛКМ нажат и обратно
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     isMouseDown = True
@@ -64,7 +74,7 @@ def main():
                     currentX = event.pos[0]
                     currentY = event.pos[1]
 
-            # colors
+            # Цвета для кнопок
             if pressed[pygame.K_r]:
                 color = RED
             if pressed[pygame.K_g]:
@@ -72,80 +82,80 @@ def main():
             if pressed[pygame.K_b]:
                 color = BLUE
 
-            # rectangle
+            # прямоугольник
             if pressed[pygame.K_1]:
                 figure = "rectangle"
-            # ellipse
+            # овал
             if pressed[pygame.K_2]:
                 figure = "ellipse"
 
-            # circle
+            # круг
             if pressed[pygame.K_3]:
                 figure = "circle"
-            # square
+            # квадрат
             if pressed[pygame.K_4]:
                 figure = "square"
-            # right triangle
+            # Прямоугольный треугольник
             if pressed[pygame.K_5]:
                 figure = "right triangle"
-            # equilateral triangle
+            # Правильный треугольник
             if pressed[pygame.K_6]:
                 figure = "equilateral triangle"
-            # rhombus
+            # ромб
             if pressed[pygame.K_7]:
                 figure = "rhombus"
 
-            # eraser
+            # Стерка(резинка)
             if pressed[pygame.K_8]:
                 figure = "eraser"
 
-        # rectangle
+        # прямоугольник
         if figure == "rectangle":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (0, 0))
                 r = calculateRect(prevX, prevY, currentX, currentY)
                 pygame.draw.rect(screen, color, pygame.Rect(r), 1)
-        # ellipse
+        # овал
         if figure == "ellipse":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (0, 0))
                 r = calculateRect(prevX, prevY, currentX, currentY)
                 pygame.draw.ellipse(screen, color, pygame.Rect(r), 1)
-        # circle
+        # круг
         if figure == "circle":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (0, 0))
                 center = calculateCenter(prevX, prevY, currentX, currentY)
                 radius = calculateRadius(prevX, prevY, currentX, currentY)
                 pygame.draw.circle(screen, color, tuple(center), radius, 1)
-        # square
+        # квадрат
         if figure == "square":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (0, 0))
                 r = calculateSquare(prevX, prevY, currentX, currentY)
                 pygame.draw.rect(screen, color, pygame.Rect(r), 1)
 
-        # right triangle
+        # прямоугольный треугольник
         if figure == "right triangle":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (0, 0))
                 r = rightTriangle(prevX, prevY, currentX, currentY)
                 pygame.draw.polygon(screen, color, r, 1)
 
-        # equilateral triangle
+        # Правильный треугольник
         if figure == "equilateral triangle":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (0, 0))
                 r = equilateralTriangle(prevX, prevY, currentX, currentY)
                 pygame.draw.polygon(screen, color, r, 1)
-        # Rhombus
+        # Ромб
         if figure == "rhombus":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (0, 0))
                 r = calculateRhombus(prevX, prevY, currentX, currentY)
                 pygame.draw.polygon(screen, color, r, 1)
 
-        # eraser
+        # Стерка(резинка)
         if figure == "eraser":
             if isMouseDown and prevX != -1 and prevY != -1 and currentX != -1 and currentY != -1:
                 screen.blit(baseLayer, (5, 5))
@@ -154,7 +164,7 @@ def main():
         pygame.display.flip()
         clock.tick(60)
 
-
+# Функции для каждой из фигур; каждая из которых берет четыре переменные как сами координаты и проводит между нужными линию
 def calculateRect(x1, y1, x2, y2):
     return pygame.Rect(min(x1, x2), min(y1, y2), abs(x1 - x2), abs(y1 - y2))
 
@@ -186,7 +196,7 @@ def calculateRhombus(x1, y1, x2, y2):
     a4 = ((x1 + x2) / 2, max(y1, y2))
     return (a1, a2, a3, a4)
 
-
+#функция для Стерки(резинки)
 def eraser():
     clock = pygame.time.Clock()
 
